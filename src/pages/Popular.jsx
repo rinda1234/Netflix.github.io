@@ -4,46 +4,43 @@ import "../styles/popular.css";
 
 export default function Popular() {
     const [movies, setMovies] = useState([]);
-    const [page, setPage] = useState(1);              // infinite용
-    const [currentPage, setCurrentPage] = useState(1); // table용
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
+
     const [viewMode, setViewMode] = useState("infinite"); // infinite | table
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [wishlist, setWishlist] = useState(() => {
         return JSON.parse(localStorage.getItem("wishlist")) || [];
     });
 
     const toggleWishlist = (movie) => {
-        const exists = wishlist.find((m) => m.id === movie.id);
-        const updated = exists
-            ? wishlist.filter((m) => m.id !== movie.id)
-            : [...wishlist, movie];
+        setWishlist((prev) => {
+            const exists = prev.some((m) => m.id === movie.id);
+            const updated = exists
+                ? prev.filter((m) => m.id !== movie.id)
+                : [...prev, movie];
 
-        setWishlist(updated);
-        localStorage.setItem("wishlist", JSON.stringify(updated));
+            localStorage.setItem("wishlist", JSON.stringify(updated));
+            return updated;
+        });
     };
 
-    // 🔥 Popular API 호출 (viewMode 분기)
+    /* =========================
+       API FETCH
+    ========================= */
     useEffect(() => {
         const fetchPopular = async () => {
-            if (loading) return;
-
             setLoading(true);
             try {
-                const pageToLoad =
-                    viewMode === "table" ? currentPage : page;
-
                 const res = await tmdb.get("/movie/popular", {
-                    params: { page: pageToLoad }
+                    params: { page: viewMode === "infinite" ? page : currentPage },
                 });
 
-                if (viewMode === "table") {
-                    // Table View: 한 페이지씩 교체
-                    setMovies(res.data.results);
-                    setHasMore(currentPage < res.data.total_pages);
-                } else {
-                    // Infinite Scroll: 누적 + 중복 제거
+                setTotalPages(res.data.total_pages);
+
+                if (viewMode === "infinite") {
                     setMovies((prev) => {
                         const ids = new Set(prev.map((m) => m.id));
                         const filtered = res.data.results.filter(
@@ -51,7 +48,8 @@ export default function Popular() {
                         );
                         return [...prev, ...filtered];
                     });
-                    setHasMore(page < res.data.total_pages);
+                } else {
+                    setMovies(res.data.results);
                 }
             } catch (e) {
                 console.error(e);
@@ -63,135 +61,125 @@ export default function Popular() {
         fetchPopular();
     }, [page, currentPage, viewMode]);
 
-    // 🔥 Infinite Scroll (infinite 모드일 때만)
+    /* =========================
+       Infinite Scroll
+    ========================= */
     useEffect(() => {
         if (viewMode !== "infinite") return;
 
-        const handleScroll = () => {
-            const bottom =
+        const onScroll = () => {
+            const nearBottom =
                 window.innerHeight + window.scrollY >=
                 document.body.offsetHeight - 200;
 
-            if (bottom && !loading && hasMore) {
-                setPage((prev) => prev + 1);
+            if (nearBottom && !loading && page < totalPages) {
+                setPage((p) => p + 1);
             }
         };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [loading, hasMore, viewMode]);
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [loading, page, totalPages, viewMode]);
+
+    /* =========================
+       Scroll Lock (Table View)
+    ========================= */
+    useEffect(() => {
+        if (viewMode === "table") {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [viewMode]);
+
+    /* =========================
+       Top Button
+    ========================= */
+    const scrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return (
-        <div className="page">
-            <h2 className="page-title">🔥 Popular Movies</h2>
+        <div className="page popular-page">
+            <div className="popular-header">
+                <h2>🔥 Popular Movies</h2>
 
-            {/* 🔀 View 전환 버튼 */}
-            <div className="view-toggle">
-                <button
-                    className={viewMode === "infinite" ? "active" : ""}
-                    onClick={() => {
-                        setViewMode("infinite");
-                        setMovies([]);
-                        setPage(1);
-                    }}
-                >
-                    Infinite Scroll
-                </button>
-
-                <button
-                    className={viewMode === "table" ? "active" : ""}
-                    onClick={() => {
-                        setViewMode("table");
-                        setCurrentPage(1);
-                    }}
-                >
-                    Table View
-                </button>
+                <div className="view-toggle">
+                    <button
+                        className={viewMode === "infinite" ? "active" : ""}
+                        onClick={() => {
+                            setMovies([]);
+                            setPage(1);
+                            setViewMode("infinite");
+                        }}
+                    >
+                        Infinite View
+                    </button>
+                    <button
+                        className={viewMode === "table" ? "active" : ""}
+                        onClick={() => {
+                            setCurrentPage(1);
+                            setViewMode("table");
+                        }}
+                    >
+                        Table View
+                    </button>
+                </div>
             </div>
 
-            {/* 🎬 Infinite Scroll View */}
-            {viewMode === "infinite" && (
-                <div className="movie-grid">
-                    {movies.map((movie) => (
-                        <div
-                            key={movie.id}
-                            className={`movie-card ${
-                                wishlist.some((m) => m.id === movie.id)
-                                    ? "liked"
-                                    : ""
-                            }`}
-                            onClick={() => toggleWishlist(movie)}
-                        >
-                            <img
-                                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                alt={movie.title}
-                            />
-                            <h3>{movie.title}</h3>
-                        </div>
-                    ))}
+            {/* Movie Grid */}
+            <div className={`movie-grid ${viewMode}`}>
+                {movies.map((movie) => (
+                    <div
+                        key={movie.id}
+                        className={`movie-card ${
+                            wishlist.some((m) => m.id === movie.id)
+                                ? "liked"
+                                : ""
+                        }`}
+                        onClick={() => toggleWishlist(movie)}
+                    >
+                        <img
+                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
+                        />
+                        <h3>{movie.title}</h3>
+                    </div>
+                ))}
+            </div>
+
+            {/* Pagination (Table View only) */}
+            {viewMode === "table" && (
+                <div className="pagination">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage((p) => p - 1)}
+                    >
+                        Prev
+                    </button>
+                    <span>
+                        {currentPage} / {totalPages}
+                    </span>
+                    <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage((p) => p + 1)}
+                    >
+                        Next
+                    </button>
                 </div>
             )}
 
-            {/* 📋 Table View */}
-            {viewMode === "table" && (
-                <>
-                    <table className="movie-table">
-                        <thead>
-                        <tr>
-                            <th>Poster</th>
-                            <th>Title</th>
-                            <th>Release</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {movies.map((movie) => (
-                            <tr
-                                key={movie.id}
-                                className={
-                                    wishlist.some((m) => m.id === movie.id)
-                                        ? "liked"
-                                        : ""
-                                }
-                                onClick={() => toggleWishlist(movie)}
-                            >
-                                <td>
-                                    <img
-                                        src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                                        alt={movie.title}
-                                    />
-                                </td>
-                                <td>{movie.title}</td>
-                                <td>{movie.release_date}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-
-                    {/* 📄 Pagination */}
-                    <div className="pagination">
-                        <button
-                            disabled={currentPage === 1}
-                            onClick={() =>
-                                setCurrentPage((p) => p - 1)
-                            }
-                        >
-                            Prev
-                        </button>
-
-                        <span>{currentPage}</span>
-
-                        <button
-                            onClick={() =>
-                                setCurrentPage((p) => p + 1)
-                            }
-                        >
-                            Next
-                        </button>
-                    </div>
-                </>
-            )}
-
+            {/* Loading */}
             {loading && <div className="loading">Loading...</div>}
+
+            {/* Top Button */}
+            <button className="top-btn" onClick={scrollTop}>
+                ↑ TOP
+            </button>
         </div>
     );
 }
