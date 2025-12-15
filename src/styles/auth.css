@@ -189,3 +189,34 @@ button.primary.error {
         transform: translateY(0);
     }
 }
+.app-header {
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0b0b0b;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+    color: #fff;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.logout-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #e50914;
+    border-color: #e50914;
+}
+
