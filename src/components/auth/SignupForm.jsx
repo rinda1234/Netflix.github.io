@@ -2,32 +2,57 @@ import { useState } from "react";
 import MaterialInput from "./MaterialInput";
 
 export default function SignupForm({ onBack }) {
-    const [status, setStatus] = useState("idle"); // idle | loading | success | error
+    const [status, setStatus] = useState("idle");
     const [errorMsg, setErrorMsg] = useState("");
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
 
     const handleSignup = () => {
         if (status !== "idle") return;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            setErrorMsg("이메일 형식이 올바르지 않습니다.");
+            setStatus("error");
+            setTimeout(() => setStatus("idle"), 600);
+            return;
+        }
+
+        if (!email || !password || !confirm) {
+            setErrorMsg("모든 항목을 입력해주세요.");
+            setStatus("error");
+            setTimeout(() => setStatus("idle"), 600);
+            return;
+        }
+
+        if (password !== confirm) {
+            setErrorMsg("비밀번호가 서로 일치하지 않습니다.");
+            setStatus("error");
+            setTimeout(() => setStatus("idle"), 600);
+            return;
+        }
 
         setStatus("loading");
         setErrorMsg("");
 
-        // 서버 요청 흉내
         setTimeout(() => {
-            const success = true; // 테스트용: 성공(true) / 실패(false) 바꿔가며 확인
+            const success = true;
 
             if (success) {
-                setStatus("success");
+                localStorage.setItem(
+                    "userAccount",
+                    JSON.stringify({ email, password })
+                );
 
-                // ✓ 잠깐 보여주고 로그인 화면으로 복귀
+                setStatus("success");
                 setTimeout(() => {
-                    setStatus("idle");
-                    onBack(); // 👉 로그인 화면으로 전환
-                }, 700);
+                    onBack();
+                }, 600);
             } else {
                 setStatus("error");
-                setErrorMsg("회원가입에 실패했습니다. 다시 시도해주세요.");
-
-                // shake 끝나면 idle 복귀
+                setErrorMsg("회원가입에 실패했습니다.");
                 setTimeout(() => setStatus("idle"), 600);
             }
         }, 1200);
@@ -37,11 +62,26 @@ export default function SignupForm({ onBack }) {
         <>
             <h2>Sign Up</h2>
 
-            <MaterialInput label="Email" />
-            <MaterialInput label="Password" type="password" />
-            <MaterialInput label="Confirm Password" type="password" />
+            <MaterialInput
+                label="Email"
+                value={email}
+                onChange={setEmail}
+            />
 
-            {/* 에러 메시지 */}
+            <MaterialInput
+                label="Password"
+                type="password"
+                value={password}
+                onChange={setPassword}
+            />
+
+            <MaterialInput
+                label="Confirm Password"
+                type="password"
+                value={confirm}
+                onChange={setConfirm}
+            />
+
             {errorMsg && <div className="error-message">{errorMsg}</div>}
 
             <button

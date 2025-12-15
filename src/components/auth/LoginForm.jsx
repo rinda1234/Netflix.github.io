@@ -6,39 +6,75 @@ export default function LoginForm({ onSignup }) {
     const [status, setStatus] = useState("idle"); // idle | loading | success | error
     const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [remember, setRemember] = useState(false);
 
-    const handleSignIn = () => {
-        if (status !== "idle") return;
+    const handleLogin = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        setStatus("loading");
-        setErrorMsg("");
+        if (!emailRegex.test(email)) {
+            setErrorMsg("이메일 형식이 올바르지 않습니다.");
+            setStatus("error");
+            return;
+        }
 
-        // 서버 요청 흉내
+        const storedUser = JSON.parse(
+            localStorage.getItem("userAccount")
+        );
+
+        if (
+            !storedUser ||
+            storedUser.email !== email ||
+            storedUser.password !== password
+        ) {
+            setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
+            setStatus("error");
+            return;
+        }
+
+        // Remember me
+        if (remember) {
+            localStorage.setItem("keepLogin", "true");
+        } else {
+            localStorage.removeItem("keepLogin");
+        }
+
+        localStorage.setItem("isLoggedIn", "true");
+        setStatus("success");
+
         setTimeout(() => {
-            const success = false; // ❗ 테스트용: 실패로 고정
-
-            if (success) {
-                localStorage.setItem("isLoggedIn", "true");
-                setStatus("success");
-                setTimeout(() => navigate("/"), 600);
-            } else {
-                setStatus("error");
-                setErrorMsg("이메일 또는 비밀번호가 올바르지 않습니다.");
-
-                // shake 애니메이션 끝나면 idle로 복귀
-                setTimeout(() => {
-                    setStatus("idle");
-                }, 600);
-            }
-        }, 1200);
+            navigate("/");
+        }, 600);
     };
+
 
     return (
         <>
             <h2>Sign In</h2>
 
-            <MaterialInput label="Email" />
-            <MaterialInput label="Password" type="password" />
+            <MaterialInput
+                label="Email"
+                value={email}
+                onChange={setEmail}
+            />
+
+            <MaterialInput
+                label="Password"
+                type="password"
+                value={password}
+                onChange={setPassword}
+            />
+
+
+            <label className="remember">
+                <input
+                    type="checkbox"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                />
+                Remember me
+            </label>
 
             {/* 에러 메시지 */}
             {errorMsg && (
@@ -49,7 +85,8 @@ export default function LoginForm({ onSignup }) {
 
             <button
                 className={`primary ${status}`}
-                onClick={handleSignIn}
+                onClick={handleLogin}
+
             >
                 {status === "idle" && "SIGN IN"}
                 {status === "loading" && <span className="loader" />}
