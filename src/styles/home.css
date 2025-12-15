@@ -1,0 +1,65 @@
+/* 전체 그리드 */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    margin-top: 70px;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* 영화 카드 */
+.movie-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 포스터 */
+.movie-card img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+/* 제목 */
+.movie-card h3 {
+    margin: 8px 0 0;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+}
+
+/* Hover 애니메이션 */
+.movie-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+}
+
+/* 추천(찜) 표시 */
+.movie-card.liked::after {
+    content: "★";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: gold;
+    color: black;
+    font-size: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.empty {
+    color: #aaa;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 80px;
+}
+.page {
+    padding-top: 70px; /* Header 높이 */
+}
+

@@ -1,0 +1,45 @@
+.page {
+    padding-top: 70px;
+}
+
+.page-title {
+    margin: 20px;
+    color: white;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    padding: 20px;
+}
+
+.wishlist-card {
+    cursor: pointer;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.wishlist-card img {
+    width: 100%;
+    display: block;
+}
+
+.wishlist-card .info {
+    padding: 10px;
+    color: white;
+}
+
+.empty {
+    margin-top: 120px;
+    text-align: center;
+    color: #aaa;
+    font-size: 18px;
+}

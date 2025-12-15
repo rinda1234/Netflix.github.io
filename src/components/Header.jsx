@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Header() {
     const navigate = useNavigate();
+    const [scrolled, setScrolled] = useState(false);
 
     const isLoggedIn =
         localStorage.getItem("isLoggedIn") === "true" ||
@@ -15,10 +17,19 @@ export default function Header() {
         navigate("/signin");
     };
 
+    useEffect(() => {
+        const onScroll = () => {
+            setScrolled(window.scrollY > 40);
+        };
+
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     if (!isLoggedIn) return null;
 
     return (
-        <header className="app-header">
+        <header className={`app-header ${scrolled ? "scrolled" : ""}`}>
             <h1 className="logo" onClick={() => navigate("/")}>
                 MyApp
             </h1>
@@ -30,9 +41,7 @@ export default function Header() {
                 <NavLink to="/wishlist">Wishlist</NavLink>
             </nav>
 
-            <span className="user-email">
-                {user?.email}
-            </span>
+            <span className="user-email">{user?.email}</span>
 
             <button className="logout-btn" onClick={handleLogout}>
                 LOGOUT

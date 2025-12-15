@@ -40,3 +40,61 @@
 .read-the-docs {
   color: #888;
 }
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 70px;
+    padding: 0 24px;
+    background: rgba(15, 15, 15, 0.95);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(6px);
+}
+
+.app-header.scrolled {
+    height: 54px;
+    background: rgba(15, 15, 15, 0.75);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.logo {
+    cursor: pointer;
+    font-size: 22px;
+    transition: font-size 0.3s ease;
+}
+
+.app-header.scrolled .logo {
+    font-size: 18px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+}
+
+.nav-menu a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.nav-menu a.active {
+    color: #ff4d4d;
+}
+
+.user-email {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.logout-btn {
+    background: #ff4d4d;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+}

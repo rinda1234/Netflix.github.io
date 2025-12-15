@@ -8,7 +8,6 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRouter() {
     return (
-        <BrowserRouter>
             <Routes>
                 <Route path="/signin" element={<SigninPage />} />
 
@@ -48,6 +47,5 @@ export default function AppRouter() {
                     }
                 />
             </Routes>
-        </BrowserRouter>
     );
 }

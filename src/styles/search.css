@@ -1,0 +1,51 @@
+.page {
+    padding-top: 70px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-bar button,
+.search-bar select {
+    padding: 10px;
+    background: #222;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.recent {
+    padding: 0 20px 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.recent button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4d4d;
+}
+
+.empty {
+    margin-top: 80px;
+    text-align: center;
+    color: #aaa;
+}
