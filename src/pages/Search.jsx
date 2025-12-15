@@ -6,130 +6,139 @@ export default function Search() {
     const [query, setQuery] = useState("");
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
+    /* filters */
+    const [minRate, setMinRate] = useState(0);
+    const [sort, setSort] = useState("popularity.desc");
+
+    /* wishlist */
     const [wishlist, setWishlist] = useState(() => {
         return JSON.parse(localStorage.getItem("wishlist")) || [];
     });
 
-    const [sort, setSort] = useState("popularity"); // popularity | rating | release
-    const [recent, setRecent] = useState(() => {
-        return JSON.parse(localStorage.getItem("recentSearch")) || [];
-    });
-
-    // ❤️ 찜 토글
     const toggleWishlist = (movie) => {
-        const exists = wishlist.find((m) => m.id === movie.id);
-        const updated = exists
-            ? wishlist.filter((m) => m.id !== movie.id)
-            : [...wishlist, movie];
-
-        setWishlist(updated);
-        localStorage.setItem("wishlist", JSON.stringify(updated));
+        setWishlist((prev) => {
+            const exists = prev.some((m) => m.id === movie.id);
+            const updated = exists
+                ? prev.filter((m) => m.id !== movie.id)
+                : [...prev, movie];
+            localStorage.setItem("wishlist", JSON.stringify(updated));
+            return updated;
+        });
     };
 
-    // 🔍 검색 실행
-    const handleSearch = async (q) => {
-        if (!q.trim()) return;
+    /* search */
+    const searchMovies = async () => {
+        if (!query.trim()) return;
 
         setLoading(true);
-        setError(false);
 
         try {
             const res = await tmdb.get("/search/movie", {
-                params: { query: q }
+                params: { query },
             });
 
             let results = res.data.results || [];
 
-            // 정렬
-            if (sort === "rating") {
+            // ⭐ 필터링
+            results = results.filter(
+                (m) => m.vote_average >= minRate
+            );
+
+            // ⭐ 정렬
+            if (sort === "vote_average.desc") {
                 results.sort((a, b) => b.vote_average - a.vote_average);
-            }
-            if (sort === "release") {
-                results.sort(
-                    (a, b) =>
-                        new Date(b.release_date) -
-                        new Date(a.release_date)
-                );
+            } else {
+                results.sort((a, b) => b.popularity - a.popularity);
             }
 
             setMovies(results);
 
-            // 최근 검색어 저장 (중복 제거, 최대 5개)
-            const updatedRecent = [
-                q,
-                ...recent.filter((r) => r !== q)
+            // ⭐ 최근 검색어 저장 (LocalStorage)
+            const history =
+                JSON.parse(localStorage.getItem("recentSearch")) || [];
+
+            const updatedHistory = [
+                query,
+                ...history.filter((q) => q !== query),
             ].slice(0, 5);
 
-            setRecent(updatedRecent);
             localStorage.setItem(
                 "recentSearch",
-                JSON.stringify(updatedRecent)
+                JSON.stringify(updatedHistory)
             );
         } catch (e) {
             console.error(e);
-            setError(true);
         } finally {
             setLoading(false);
         }
     };
 
-    return (
-        <div className="page">
-            <h2 className="page-title">🔍 Search Movies</h2>
+    /* reset */
+    const resetFilters = () => {
+        setQuery("");
+        setMovies([]);
+        setMinRate(0);
+        setSort("popularity.desc");
+    };
 
-            {/* 🔎 검색창 */}
+    return (
+        <div className="page search-page">
+            <h2>🔍 Search Movies</h2>
+
+            {/* Search Bar */}
             <div className="search-bar">
                 <input
+                    placeholder="Search movie title..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search movie title..."
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSearch(query);
+                        if (e.key === "Enter") searchMovies();
                     }}
                 />
-                <button onClick={() => handleSearch(query)}>
-                    Search
-                </button>
-
-                <select
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value)}
-                >
-                    <option value="popularity">Popularity</option>
-                    <option value="rating">Rating</option>
-                    <option value="release">Release Date</option>
-                </select>
+                <button onClick={searchMovies}>Search</button>
             </div>
 
-            {/* 🕘 최근 검색어 */}
-            {recent.length > 0 && (
-                <div className="recent">
-                    <span>Recent:</span>
-                    {recent.map((r) => (
-                        <button
-                            key={r}
-                            onClick={() => {
-                                setQuery(r);
-                                handleSearch(r);
-                            }}
-                        >
-                            {r}
-                        </button>
-                    ))}
-                </div>
-            )}
+            {/* Filters */}
+            <div className="filters">
+                <label>
+                    Min Rating:
+                    <select
+                        value={minRate}
+                        onChange={(e) =>
+                            setMinRate(Number(e.target.value))
+                        }
+                    >
+                        <option value={0}>All</option>
+                        <option value={5}>5+</option>
+                        <option value={7}>7+</option>
+                        <option value={8}>8+</option>
+                    </select>
+                </label>
 
-            {/* 상태 처리 */}
+                <label>
+                    Sort:
+                    <select
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                    >
+                        <option value="popularity.desc">
+                            Popularity
+                        </option>
+                        <option value="vote_average.desc">
+                            Rating
+                        </option>
+                    </select>
+                </label>
+
+                <button className="reset-btn" onClick={resetFilters}>
+                    Reset
+                </button>
+            </div>
+
+            {/* Result */}
             {loading && <div className="loading">Loading...</div>}
-            {error && (
-                <div className="empty">
-                    검색 결과를 불러오지 못했습니다 😢
-                </div>
-            )}
 
-            {/* 🎬 검색 결과 */}
             <div className="movie-grid">
                 {movies.map((movie) => (
                     <div
