@@ -148,3 +148,44 @@ button.link:hover {
         transform: scale(1) translateY(0);
     }
 }
+/* ===============================
+   ERROR MESSAGE
+   =============================== */
+.error-message {
+    margin-top: 16px;
+    color: #ff6b6b;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ===============================
+   SHAKE ANIMATION
+   =============================== */
+button.primary.error {
+    animation: shake 0.4s ease;
+    background: linear-gradient(135deg, #ff4d4f, #d9363e);
+    box-shadow: 0 0 20px rgba(255, 77, 79, 0.6);
+}
+
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-6px); }
+    40%  { transform: translateX(6px); }
+    60%  { transform: translateX(-4px); }
+    80%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+/* ===============================
+   FADE IN
+   =============================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
