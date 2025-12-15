@@ -1,3 +1,12 @@
+import Header from "../components/Header";
+
 export default function Popular() {
-    return <h1>Popular Page</h1>;
+    return (
+        <>
+            <Header />
+            <main style={{ padding: "24px", color: "#fff" }}>
+                <h2>Popular</h2>
+            </main>
+        </>
+    );
 }
