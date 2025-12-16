@@ -1,96 +1,102 @@
 /* ===============================
-   HEADER BASE (PC)
-   =============================== */
+   HEADER BASE
+=============================== */
 .app-header {
     position: sticky;
     top: 0;
     z-index: 1000;
-
-    width: 100%;
-    height: 64px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    padding: 0 24px; /* PC 좌우 여백 */
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
+    padding: 12px 24px;   /* PC 기본 */
 }
 
-/* LOGO */
+/* ===============================
+   LOGO
+=============================== */
 .logo {
     color: #fff;
     font-size: 18px;
-    font-weight: 600;
+    letter-spacing: 1px;
     cursor: pointer;
     white-space: nowrap;
 }
 
-/* NAV MENU */
+/* ===============================
+   NAV MENU
+=============================== */
 .nav-menu {
     display: flex;
-    gap: 16px;
+    align-items: center;
 }
 
 .nav-menu a {
+    margin-right: 16px;   /* PC 기본 간격 */
     color: white;
     text-decoration: none;
     font-size: 14px;
+    white-space: nowrap;
+}
+
+.nav-menu a:last-child {
+    margin-right: 0;
 }
 
 .nav-menu a.active {
     color: #e50914;
 }
 
-/* LOGOUT */
+/* ===============================
+   LOGOUT BUTTON
+=============================== */
 .logout-btn {
     background: none;
-    border: 1px solid rgba(255,255,255,0.6);
+    border: 1px solid #fff;
     color: white;
     padding: 6px 12px;
     border-radius: 999px;
     cursor: pointer;
+    font-size: 12px;
     white-space: nowrap;
 }
 
 /* ===============================
-   MOBILE HEADER (핵심)
-   =============================== */
+   MOBILE (핵심 수정 구간)
+=============================== */
 @media (max-width: 768px) {
     .app-header {
+        padding: 10px 12px;      /* ⭐ 좌우 여백 줄임 */
         height: 52px;
-
-        /* 🔥 검은 배경 거의 풀폭 */
-        padding: 0 6px;
-
-        /* 🔥 가운데 기준 정렬 */
-        justify-content: center;
-        gap: 12px;
     }
 
     .logo {
-        font-size: 14px;
-        flex-shrink: 0;
+        font-size: 14px;         /* 로고 축소 */
+        margin-right: 8px;
     }
 
     .nav-menu {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        flex-shrink: 1;
+        flex: 1;
+        justify-content: center; /* ⭐ 메뉴 전체를 가운데로 */
     }
 
     .nav-menu a {
+        margin-right: 10px;      /* ⭐ 모바일 메뉴 간격 축소 */
         font-size: 13px;
-        padding: 4px 4px;
-        white-space: nowrap;
+        padding: 4px 2px;
+    }
+
+    /* ⭐⭐ Home 버튼만 왼쪽 여백 줄이기 (핵심) */
+    .nav-menu a:first-child {
+        margin-left: -6px;
     }
 
     .logout-btn {
-        margin-left: 0; /* ⭐ auto 제거 */
+        margin-left: 6px;
         padding: 4px 8px;
         font-size: 11px;
-        flex-shrink: 0;
     }
 }
