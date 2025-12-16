@@ -1,53 +1,39 @@
 /* =========================
-   공통 page 레이아웃
+   Page Layout
 ========================= */
 .page {
     width: 100%;
-    min-height: calc(100vh - 80px); /* header 높이 */
+    min-height: calc(100vh - 80px);
     padding-top: 80px;
     box-sizing: border-box;
 }
 
 .page.popular-page {
     height: calc(100vh - 80px);
-    overflow: hidden; /* ✅ Table View에서 스크롤 차단 */
-}
-
-.page-title {
-    color: white;
-    margin: 20px;
+    overflow: hidden;
 }
 
 /* =========================
-   공통 Movie Grid
+   Movie Grid
 ========================= */
 .movie-grid {
     width: 100%;
 }
 
-/* =========================
-   Infinite View
-========================= */
+/* Infinite View */
 .movie-grid.infinite {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 16px;
-
-    height: auto;
-    overflow: visible; /* ✅ Infinite View에서는 스크롤 허용 */
 }
 
-/* =========================
-   Table View
-========================= */
+/* Table View */
 .movie-grid.table {
     display: grid;
+    grid-template-columns: repeat(6, 1fr);
     gap: 16px;
 
-    /* ⭐ PC에서는 더 많은 컬럼 */
-    grid-template-columns: repeat(6, 1fr);
-
-    height: calc(100vh - 180px);
+    height: calc(100vh - 200px);
     overflow: hidden;
 }
 
@@ -68,16 +54,7 @@
 }
 
 /* =========================
-   Loading
-========================= */
-.loading {
-    text-align: center;
-    color: #aaa;
-    padding: 40px;
-}
-
-/* =========================
-   View Toggle
+   Controls
 ========================= */
 .view-toggle {
     display: flex;
@@ -97,35 +74,25 @@
     background: #ff4d4d;
 }
 
-/* =========================
-   Pagination (Table View)
-========================= */
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 16px;
     margin: 20px;
 }
 
 /* =========================
-   반응형 (겹침 방지)
+   Responsive
 ========================= */
-
-/* ===============================
-   TABLE VIEW (태블릿)
-   =============================== */
 @media (max-width: 1024px) {
     .movie-grid.table {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
-/* ===============================
-   TABLE VIEW (모바일)
-   =============================== */
 @media (max-width: 768px) {
     .movie-grid.table {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
     }
 }

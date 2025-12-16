@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/popular.css";
 import useWishlist from "../hooks/useWishlist";
+
+const ITEMS_PER_PAGE = 12; // ⭐ Table View 기준 한 페이지 개수
 
 export default function Popular() {
     const [movies, setMovies] = useState([]);
@@ -12,7 +14,6 @@ export default function Popular() {
     const [viewMode, setViewMode] = useState("infinite"); // infinite | table
     const [currentPage, setCurrentPage] = useState(1);
 
-    // ✅ Custom Hook 사용 (중요)
     const { toggleWishlist, isWishlisted } = useWishlist();
 
     /* =========================
@@ -24,7 +25,7 @@ export default function Popular() {
             try {
                 const res = await tmdb.get("/movie/popular", {
                     params: {
-                        page: viewMode === "infinite" ? page : currentPage,
+                        page: viewMode === "infinite" ? page : 1, // ⭐ Table View는 항상 page=1
                     },
                 });
 
@@ -39,7 +40,7 @@ export default function Popular() {
                         return [...prev, ...filtered];
                     });
                 } else {
-                    setMovies(res.data.results);
+                    setMovies(res.data.results); // ⭐ 한 페이지 데이터만 저장
                 }
             } catch (e) {
                 console.error(e);
@@ -49,7 +50,7 @@ export default function Popular() {
         };
 
         fetchPopular();
-    }, [page, currentPage, viewMode]);
+    }, [page, viewMode]);
 
     /* =========================
        Infinite Scroll
@@ -72,7 +73,7 @@ export default function Popular() {
     }, [loading, page, totalPages, viewMode]);
 
     /* =========================
-       Scroll Lock (Table View)
+       Scroll Lock
     ========================= */
     useEffect(() => {
         document.body.style.overflow =
@@ -84,12 +85,19 @@ export default function Popular() {
     }, [viewMode]);
 
     /* =========================
-       Top Button
+       Table View Slice
     ========================= */
-    const scrollTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+    const tableMovies = useMemo(() => {
+        if (viewMode !== "table") return movies;
 
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE;
+        return movies.slice(start, end);
+    }, [movies, currentPage, viewMode]);
+
+    /* =========================
+       UI
+    ========================= */
     return (
         <div className="page popular-page">
             <div className="popular-header">
@@ -120,7 +128,7 @@ export default function Popular() {
 
             {/* Movie Grid */}
             <div className={`movie-grid ${viewMode}`}>
-                {movies.map((movie) => (
+                {(viewMode === "table" ? tableMovies : movies).map((movie) => (
                     <div
                         key={movie.id}
                         className={`movie-card ${
@@ -146,11 +154,11 @@ export default function Popular() {
                     >
                         Prev
                     </button>
-                    <span>
-                        {currentPage} / {totalPages}
-                    </span>
+                    <span>Page {currentPage}</span>
                     <button
-                        disabled={currentPage === totalPages}
+                        disabled={
+                            currentPage * ITEMS_PER_PAGE >= movies.length
+                        }
                         onClick={() => setCurrentPage((p) => p + 1)}
                     >
                         Next
@@ -160,7 +168,12 @@ export default function Popular() {
 
             {loading && <div className="loading">Loading...</div>}
 
-            <button className="top-btn" onClick={scrollTop}>
+            <button
+                className="top-btn"
+                onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+            >
                 ↑ TOP
             </button>
         </div>
