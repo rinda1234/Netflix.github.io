@@ -9,6 +9,7 @@ const tmdb = axios.create({
     params: {
         language: "ko-KR",
     },
+
 });
 
 export default tmdb;
