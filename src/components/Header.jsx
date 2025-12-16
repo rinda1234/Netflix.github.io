@@ -10,7 +10,8 @@ export default function Header() {
         localStorage.getItem("isLoggedIn") === "true" ||
         localStorage.getItem("keepLogin") === "true";
 
-    const user = JSON.parse(localStorage.getItem("userAccount"));
+    // ✅ username 가져오기
+    const username = localStorage.getItem("currentUser");
 
     useEffect(() => {
         const onScroll = () => {
@@ -24,6 +25,7 @@ export default function Header() {
     const handleLogout = () => {
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("keepLogin");
+        localStorage.removeItem("currentUser"); // ✅ 이것도 같이 제거
         navigate("/signin");
     };
 
@@ -42,7 +44,10 @@ export default function Header() {
                 <NavLink to="/wishlist">Wishlist</NavLink>
             </nav>
 
-            <span className="user-email">{user?.email}</span>
+            {/* ✅ 여기 변경됨 */}
+            <span className="user-email">
+                {username}
+            </span>
 
             <button className="logout-btn" onClick={handleLogout}>
                 LOGOUT
