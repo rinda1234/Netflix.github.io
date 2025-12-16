@@ -9,7 +9,6 @@
 }
 
 .page.popular-page {
-    height: calc(100vh - 80px);
     overflow: hidden;
 }
 
@@ -18,6 +17,7 @@
 ========================= */
 .movie-grid {
     width: 100%;
+    padding: 0 20px;
 }
 
 /* Infinite View */
@@ -27,13 +27,17 @@
     gap: 16px;
 }
 
-/* Table View */
+/* =========================
+   Table View (중요 수정)
+========================= */
 .movie-grid.table {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
     gap: 16px;
 
-    height: calc(100vh - 200px);
+    grid-template-columns: repeat(6, 1fr);
+
+    /* ❌ height 고정 제거 */
+    max-height: calc(100vh - 260px);
     overflow: hidden;
 }
 
@@ -58,6 +62,7 @@
 ========================= */
 .view-toggle {
     display: flex;
+    justify-content: center;
     gap: 12px;
     margin: 20px;
 }
@@ -74,12 +79,16 @@
     background: #ff4d4d;
 }
 
-/* Pagination */
+/* =========================
+   Pagination
+========================= */
 .pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 16px;
     margin: 20px;
+    color: white;
 }
 
 /* =========================
