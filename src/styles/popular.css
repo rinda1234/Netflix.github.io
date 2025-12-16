@@ -12,12 +12,29 @@
     margin: 20px;
 }
 
+./* 공통 */
 .movie-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    width: 100%;
 }
+
+/* Infinite View */
+.movie-grid.infinite {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+/* Table View */
+.movie-grid.table {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 한 화면에 다 보이게 */
+    gap: 12px;
+
+    /* 🔥 핵심 */
+    height: calc(100vh - 160px);
+    overflow: hidden;
+}
+
 
 .movie-card {
     cursor: pointer;
