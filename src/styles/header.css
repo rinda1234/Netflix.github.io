@@ -10,11 +10,17 @@
     justify-content: space-between;
 }
 
-.nav-menu a {
-    margin-right: 16px;
-    color: white;
-    text-decoration: none;
+.nav-menu {
+    display: flex;
+    gap: 16px; /* PC 기본 */
 }
+
+@media (max-width: 768px) {
+    .nav-menu {
+        gap: 8px; /* 모바일 */
+    }
+}
+
 
 .nav-menu a.active {
     color: #e50914;
@@ -29,20 +35,31 @@
     cursor: pointer;
 }
 @media (max-width: 768px) {
-    .nav-menu {
-        display: none; /* 🔥 모바일에서는 숨김 */
-    }
-
-    .user-email {
-        display: none;
-    }
-
-    .logout-btn {
-        padding: 6px 10px;
-        font-size: 12px;
+    .app-header {
+        padding: 0 10px;          /* ⭐ 좌우 핵심 */
+        height: 52px;
     }
 
     .logo {
-        font-size: 16px;
+        font-size: 14px;          /* 로고 축소 */
+        white-space: nowrap;
+    }
+
+    .nav-menu {
+        display: flex;
+        gap: 8px;                 /* ⭐ margin 대신 gap */
+    }
+
+    .nav-menu a {
+        margin-right: 0;          /* 기존 margin 제거 */
+        font-size: 13px;
+        padding: 4px 2px;         /* 클릭 영역 유지 */
+    }
+
+    .logout-btn {
+        margin-left: 8px;
+        padding: 4px 8px;
+        font-size: 11px;
+        white-space: nowrap;
     }
 }
