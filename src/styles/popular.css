@@ -1,49 +1,32 @@
-/* =========================
-   Page Layout
-========================= */
+/* ===============================
+   공통 page 레이아웃 (수정)
+=============================== */
 .page {
     width: 100%;
-    min-height: calc(100vh - 80px);
-    padding-top: 80px;
+    min-height: 100vh;        /* ⭐ 고정 계산 제거 */
+    margin-top: 80px;         /* ⭐ header 공간 확보 */
+    padding-bottom: 100px;    /* ⭐ pagination 공간 */
     box-sizing: border-box;
+    overflow: visible;        /* ⭐ 중요 */
 }
 
-.page.popular-page {
-    overflow: hidden;
+/* 제목 */
+.page-title {
+    color: white;
+    margin: 20px;
 }
 
-/* =========================
-   Movie Grid
-========================= */
+/* ===============================
+   GRID (기존 유지)
+=============================== */
 .movie-grid {
-    width: 100%;
-    padding: 0 20px;
-}
-
-/* Infinite View */
-.movie-grid.infinite {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-/* =========================
-   Table View (중요 수정)
-========================= */
-.movie-grid.table {
-    display: grid;
-    gap: 16px;
-
-    grid-template-columns: repeat(6, 1fr);
-
-    /* ❌ height 고정 제거 */
-    max-height: calc(100vh - 260px);
-    overflow: hidden;
-}
-
-/* =========================
-   Movie Card
-========================= */
+/* 카드 */
 .movie-card {
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -57,16 +40,23 @@
     outline: 3px solid #ff4d4d;
 }
 
-/* =========================
-   Controls
-========================= */
+/* 로딩 */
+.loading {
+    text-align: center;
+    color: #aaa;
+    padding: 40px;
+}
+
+/* ===============================
+   VIEW TOGGLE
+=============================== */
 .view-toggle {
     display: flex;
-    justify-content: center;
     gap: 12px;
     margin: 20px;
 }
 
+/* 버튼 */
 .view-toggle button {
     padding: 8px 14px;
     border: none;
@@ -79,29 +69,36 @@
     background: #ff4d4d;
 }
 
-/* =========================
-   Pagination
-========================= */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin: 20px;
+/* ===============================
+   TABLE VIEW (유지)
+=============================== */
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
     color: white;
 }
 
-/* =========================
-   Responsive
-========================= */
-@media (max-width: 1024px) {
-    .movie-grid.table {
-        grid-template-columns: repeat(4, 1fr);
-    }
+.movie-table th,
+.movie-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
 }
 
-@media (max-width: 768px) {
-    .movie-grid.table {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.movie-table tr:hover {
+    background: #222;
+}
+
+.movie-table tr.liked {
+    background: rgba(255,0,0,0.2);
+}
+
+/* ===============================
+   PAGINATION (핵심 수정)
+=============================== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;     /* ⭐ 위 여백 */
+    padding-bottom: 40px; /* ⭐ 아래 여백 */
 }
