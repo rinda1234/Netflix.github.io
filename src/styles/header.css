@@ -1,65 +1,96 @@
+/* ===============================
+   HEADER BASE (PC)
+   =============================== */
 .app-header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
+
+    width: 100%;
+    height: 64px;
+
     display: flex;
     align-items: center;
-    padding: 12px 24px;
     justify-content: space-between;
+
+    padding: 0 24px; /* PC 좌우 여백 */
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
 }
 
+/* LOGO */
+.logo {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* NAV MENU */
 .nav-menu {
     display: flex;
-    gap: 16px; /* PC 기본 */
+    gap: 16px;
 }
 
-@media (max-width: 768px) {
-    .nav-menu {
-        gap: 8px; /* 모바일 */
-    }
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
 }
-
 
 .nav-menu a.active {
     color: #e50914;
 }
 
+/* LOGOUT */
 .logout-btn {
-    margin-left: auto;
     background: none;
-    border: 1px solid #fff;
+    border: 1px solid rgba(255,255,255,0.6);
     color: white;
     padding: 6px 12px;
+    border-radius: 999px;
     cursor: pointer;
+    white-space: nowrap;
 }
+
+/* ===============================
+   MOBILE HEADER (핵심)
+   =============================== */
 @media (max-width: 768px) {
     .app-header {
-        padding: 0 10px;          /* ⭐ 좌우 핵심 */
         height: 52px;
+
+        /* 🔥 검은 배경 거의 풀폭 */
+        padding: 0 6px;
+
+        /* 🔥 가운데 기준 정렬 */
+        justify-content: center;
+        gap: 12px;
     }
 
     .logo {
-        font-size: 14px;          /* 로고 축소 */
-        white-space: nowrap;
+        font-size: 14px;
+        flex-shrink: 0;
     }
 
     .nav-menu {
         display: flex;
-        gap: 8px;                 /* ⭐ margin 대신 gap */
+        gap: 8px;
+        justify-content: center;
+        flex-shrink: 1;
     }
 
     .nav-menu a {
-        margin-right: 0;          /* 기존 margin 제거 */
         font-size: 13px;
-        padding: 4px 2px;         /* 클릭 영역 유지 */
+        padding: 4px 4px;
+        white-space: nowrap;
     }
 
     .logout-btn {
-        margin-left: 8px;
+        margin-left: 0; /* ⭐ auto 제거 */
         padding: 4px 8px;
         font-size: 11px;
-        white-space: nowrap;
+        flex-shrink: 0;
     }
 }
