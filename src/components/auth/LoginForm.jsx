@@ -1,51 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MaterialInput from "./MaterialInput";
+import { hashPassword } from "../../api/tmdbAuth";
+
 
 export default function LoginForm({ onSignup }) {
-    const [status, setStatus] = useState("idle"); // idle | loading | success | error
-    const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleLogin = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    useEffect(() => {
+        const remembered =
+            JSON.parse(localStorage.getItem("rememberUser"));
 
-        if (!emailRegex.test(email)) {
-            setErrorMsg("이메일 형식이 올바르지 않습니다.");
-            setStatus("error");
-            return;
-        }
+        if(!remembered) return;
 
-        const storedUser = JSON.parse(
-            localStorage.getItem("userAccount")
+        setUsername(remembered.username);
+        setPassword("");
+        setRemember(true);
+    }, []);
+
+    const handleLogin = async () => {
+        const users =
+            JSON.parse(localStorage.getItem("users")) || [];
+
+        const hashed = await hashPassword(password);
+
+        const user = users.find(
+            (u) =>
+                u.username === username &&
+                u.password === hashed
         );
 
-        if (
-            !storedUser ||
-            storedUser.email !== email ||
-            storedUser.password !== password
-        ) {
-            setErrorMsg("아이디 또는 비밀번호가 올바르지 않습니다.");
-            setStatus("error");
+        if (!user) {
+            setError("아이디 또는 비밀번호가 틀렸습니다.");
             return;
-        }
-
-        // Remember me
-        if (remember) {
-            localStorage.setItem("keepLogin", "true");
-        } else {
-            localStorage.removeItem("keepLogin");
         }
 
         localStorage.setItem("isLoggedIn", "true");
-        setStatus("success");
+        localStorage.setItem("currentUser", username);
 
-        setTimeout(() => {
-            navigate("/");
-        }, 600);
+        if (remember) {
+            localStorage.setItem("keepLogin", "true");
+            localStorage.setItem(
+                "rememberUser",
+                JSON.stringify({ username })
+            );
+        } else {
+            localStorage.removeItem("keepLogin");
+            localStorage.removeItem("rememberUser");
+        }
+
+        navigate("/");
     };
 
 
@@ -54,18 +63,16 @@ export default function LoginForm({ onSignup }) {
             <h2>Sign In</h2>
 
             <MaterialInput
-                label="Email"
-                value={email}
-                onChange={setEmail}
+                label="Username"
+                value={username}
+                onChange={setUsername}
             />
-
             <MaterialInput
                 label="Password"
                 type="password"
                 value={password}
                 onChange={setPassword}
             />
-
 
             <label className="remember">
                 <input
@@ -76,22 +83,10 @@ export default function LoginForm({ onSignup }) {
                 Remember me
             </label>
 
-            {/* 에러 메시지 */}
-            {errorMsg && (
-                <div className="error-message">
-                    {errorMsg}
-                </div>
-            )}
+            {error && <div className="error-message">{error}</div>}
 
-            <button
-                className={`primary ${status}`}
-                onClick={handleLogin}
-
-            >
-                {status === "idle" && "SIGN IN"}
-                {status === "loading" && <span className="loader" />}
-                {status === "success" && "✓"}
-                {status === "error" && "SIGN IN"}
+            <button className="primary" onClick={handleLogin}>
+                SIGN IN
             </button>
 
             <button className="link" onClick={onSignup}>

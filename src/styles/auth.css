@@ -16,6 +16,8 @@
    RESPONSIVE CARD
    =============================== */
 .auth-card {
+    position: relative;
+    overflow: hidden;
     width: clamp(300px, 85vw, 420px);
     aspect-ratio: 3 / 4;
     background: linear-gradient(
@@ -51,10 +53,12 @@
 .input {
     position: relative;
     margin-top: 28px;
+    padding: 0 28px;
 }
 
 .input label {
     position: absolute;
+    padding: 0 28px;
     top: 14px;
     left: 0;
     font-size: 16px;
@@ -65,6 +69,7 @@
 
 .input.active label {
     opacity: 0;
+
     transform: translateY(-10px) scale(0.95);
 }
 
@@ -87,7 +92,8 @@
    PRIMARY BUTTON
    =============================== */
 button.primary {
-    width: 100%;
+    width: 90%;
+    margin: 36px auto 0;
     margin-top: 36px;
     padding: 14px;
     border-radius: 999px;
@@ -218,5 +224,48 @@ button.primary.error {
 .logout-btn:hover {
     background: #e50914;
     border-color: #e50914;
+}
+
+/* ===============================
+   LOGIN / SIGNUP FACE TRANSITION
+   =============================== */
+
+.auth-face {
+    position: absolute;
+    inset: 0;                 /* top:0 left:0 right:0 bottom:0 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    transition:
+            transform 0.8s cubic-bezier(.68,-0.55,.27,1.55),
+            opacity 0.5s ease;
+}
+
+
+/* 기본: 로그인 */
+.auth-card.login .login-face {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.auth-card.login .signup-face {
+    transform: translateX(120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 회원가입 */
+.auth-card.signup .login-face {
+    transform: translateX(-120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.auth-card.signup .signup-face {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
 }
 

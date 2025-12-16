@@ -13,7 +13,7 @@ export default function Popular() {
     const [currentPage, setCurrentPage] = useState(1);
 
     // ✅ Custom Hook 사용 (중요)
-    const { wishlist, toggleWishlist, isWishlisted } = useWishlist();
+    const { toggleWishlist, isWishlisted } = useWishlist();
 
     /* =========================
        API FETCH

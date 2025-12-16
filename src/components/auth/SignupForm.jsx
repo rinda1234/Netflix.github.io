@@ -1,97 +1,77 @@
 import { useState } from "react";
 import MaterialInput from "./MaterialInput";
+import { hashPassword } from "../../api/tmdbAuth";
+
 
 export default function SignupForm({ onBack }) {
-    const [status, setStatus] = useState("idle");
-    const [errorMsg, setErrorMsg] = useState("");
-
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
+    const [agree, setAgree] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSignup = () => {
-        if (status !== "idle") return;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(email)) {
-            setErrorMsg("이메일 형식이 올바르지 않습니다.");
-            setStatus("error");
-            setTimeout(() => setStatus("idle"), 600);
+    const handleSignup = async () => {
+        if (!agree) {
+            setError("약관에 동의해야 회원가입이 가능합니다.");
             return;
         }
 
-        if (!email || !password || !confirm) {
-            setErrorMsg("모든 항목을 입력해주세요.");
-            setStatus("error");
-            setTimeout(() => setStatus("idle"), 600);
+        if (!username || !email || !password) {
+            setError("모든 항목을 입력해주세요.");
             return;
         }
 
         if (password !== confirm) {
-            setErrorMsg("비밀번호가 서로 일치하지 않습니다.");
-            setStatus("error");
-            setTimeout(() => setStatus("idle"), 600);
+            setError("비밀번호가 일치하지 않습니다.");
             return;
         }
 
-        setStatus("loading");
-        setErrorMsg("");
+        const users =
+            JSON.parse(localStorage.getItem("users")) || [];
 
-        setTimeout(() => {
-            const success = true;
+        if (users.some((u) => u.username === username)) {
+            setError("이미 존재하는 아이디입니다.");
+            return;
+        }
 
-            if (success) {
-                localStorage.setItem(
-                    "userAccount",
-                    JSON.stringify({ email, password })
-                );
+        // 🔐 TMDB API를 이용한 비밀번호 처리
+        const hashed = await hashPassword(password);
 
-                setStatus("success");
-                setTimeout(() => {
-                    onBack();
-                }, 600);
-            } else {
-                setStatus("error");
-                setErrorMsg("회원가입에 실패했습니다.");
-                setTimeout(() => setStatus("idle"), 600);
-            }
-        }, 1200);
+        users.push({
+            username,
+            email,
+            password: hashed,
+        });
+
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("회원가입 성공!");
+        onBack();
     };
 
     return (
         <>
             <h2>Sign Up</h2>
 
-            <MaterialInput
-                label="Email"
-                value={email}
-                onChange={setEmail}
-            />
+            <MaterialInput label="Username" value={username} onChange={setUsername} />
+            <MaterialInput label="Email" value={email} onChange={setEmail} />
+            <MaterialInput label="Password" type="password" value={password} onChange={setPassword} />
+            <MaterialInput label="Confirm Password" type="password" value={confirm} onChange={setConfirm} />
 
-            <MaterialInput
-                label="Password"
-                type="password"
-                value={password}
-                onChange={setPassword}
-            />
+            <label className="agree">
+                <input
+                    type="checkbox"
+                    checked={agree}
+                    onChange={(e) => setAgree(e.target.checked)}
+                />
+                약관에 동의합니다 (필수)
+            </label>
 
-            <MaterialInput
-                label="Confirm Password"
-                type="password"
-                value={confirm}
-                onChange={setConfirm}
-            />
+            {error && <div className="error-message">{error}</div>}
 
-            {errorMsg && <div className="error-message">{errorMsg}</div>}
-
-            <button
-                className={`primary ${status}`}
-                onClick={handleSignup}
-            >
-                {status === "idle" && "CREATE ACCOUNT"}
-                {status === "loading" && <span className="loader" />}
-                {status === "success" && "✓"}
-                {status === "error" && "CREATE ACCOUNT"}
+            <button className="primary" onClick={handleSignup}>
+                CREATE ACCOUNT
             </button>
 
             <button className="link" onClick={onBack}>

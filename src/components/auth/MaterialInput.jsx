@@ -4,17 +4,14 @@ export default function MaterialInput({
                                           value,
                                           onChange,
                                       }) {
-    const active = value && value.length > 0;
-
     return (
-        <div className={`input ${active ? "active" : ""}`}>
+        <div className={`input ${value ? "active" : ""}`}>
             <label>{label}</label>
             <input
                 type={type}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
             />
-            <span className="spin" />
         </div>
     );
 }

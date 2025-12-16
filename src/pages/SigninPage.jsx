@@ -8,12 +8,14 @@ export default function SigninPage() {
 
     return (
         <div className="auth-container">
-            <div className="auth-card">
-                {isSignup ? (
-                    <SignupForm onBack={() => setIsSignup(false)} />
-                ) : (
+            <div className={`auth-card ${isSignup ? "signup" : "login"}`}>
+                <div className="auth-face login-face">
                     <LoginForm onSignup={() => setIsSignup(true)} />
-                )}
+                </div>
+
+                <div className="auth-face signup-face">
+                    <SignupForm onBack={() => setIsSignup(false)} />
+                </div>
             </div>
         </div>
     );
