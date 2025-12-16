@@ -1,4 +1,6 @@
-/* 공통 page 레이아웃 */
+/* =========================
+   공통 page 레이아웃
+========================= */
 .page {
     width: 100%;
     min-height: calc(100vh - 80px); /* header 높이 */
@@ -6,36 +8,50 @@
     box-sizing: border-box;
 }
 
+.page.popular-page {
+    height: calc(100vh - 80px);
+    overflow: hidden; /* ✅ Table View에서 스크롤 차단 */
+}
 
 .page-title {
     color: white;
     margin: 20px;
 }
 
-./* 공통 */
+/* =========================
+   공통 Movie Grid
+========================= */
 .movie-grid {
     width: 100%;
 }
 
-/* Infinite View */
+/* =========================
+   Infinite View
+========================= */
 .movie-grid.infinite {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 16px;
+
+    height: auto;
+    overflow: visible; /* ✅ Infinite View에서는 스크롤 허용 */
 }
 
-/* Table View */
+/* =========================
+   Table View
+========================= */
 .movie-grid.table {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 한 화면에 다 보이게 */
+    grid-template-columns: repeat(5, 1fr);
     gap: 12px;
 
-    /* 🔥 핵심 */
-    height: calc(100vh - 160px);
-    overflow: hidden;
+    height: 100%;        /* ✅ page 높이를 그대로 사용 */
+    overflow: hidden;    /* ✅ 스크롤 완전 차단 */
 }
 
-
+/* =========================
+   Movie Card
+========================= */
 .movie-card {
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -49,11 +65,18 @@
     outline: 3px solid #ff4d4d;
 }
 
+/* =========================
+   Loading
+========================= */
 .loading {
     text-align: center;
     color: #aaa;
     padding: 40px;
 }
+
+/* =========================
+   View Toggle
+========================= */
 .view-toggle {
     display: flex;
     gap: 12px;
@@ -72,28 +95,27 @@
     background: #ff4d4d;
 }
 
-.movie-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: white;
-}
-
-.movie-table th, .movie-table td {
-    padding: 12px;
-    border-bottom: 1px solid #333;
-}
-
-.movie-table tr:hover {
-    background: #222;
-}
-
-.movie-table tr.liked {
-    background: rgba(255,0,0,0.2);
-}
-
+/* =========================
+   Pagination (Table View)
+========================= */
 .pagination {
     display: flex;
     justify-content: center;
     gap: 12px;
     margin: 20px;
+}
+
+/* =========================
+   반응형 (겹침 방지)
+========================= */
+@media (max-width: 1024px) {
+    .movie-grid.table {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-grid.table {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
