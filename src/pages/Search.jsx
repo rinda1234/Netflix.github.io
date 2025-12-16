@@ -1,60 +1,65 @@
 import { useEffect, useState } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/search.css";
-import useWishlist from "../hooks/useWishlist";
 
 export default function Search() {
-    const [query, setQuery] = useState("");
     const [movies, setMovies] = useState([]);
+    const [genres, setGenres] = useState([]);
+
     const [loading, setLoading] = useState(false);
 
-    /* filters */
-    const [minRate, setMinRate] = useState(0);
+    // filters
+    const [keyword, setKeyword] = useState("");
+    const [selectedGenre, setSelectedGenre] = useState("");
+    const [minRating, setMinRating] = useState(0);
     const [sort, setSort] = useState("popularity.desc");
 
-    /* wishlist */
-    const { wishlist, toggleWishlist, isWishlisted } = useWishlist();
+    const [wishlist, setWishlist] = useState(() => {
+        return JSON.parse(localStorage.getItem("wishlist")) || [];
+    });
 
-    /* search */
+    const toggleWishlist = (movie) => {
+        setWishlist((prev) => {
+            const exists = prev.some((m) => m.id === movie.id);
+            const updated = exists
+                ? prev.filter((m) => m.id !== movie.id)
+                : [...prev, movie];
+
+            localStorage.setItem("wishlist", JSON.stringify(updated));
+            return updated;
+        });
+    };
+
+    /* =========================
+       GENRES
+    ========================= */
+    useEffect(() => {
+        tmdb.get("/genre/movie/list").then((res) => {
+            setGenres(res.data.genres);
+        });
+    }, []);
+
+    /* =========================
+       SEARCH API
+    ========================= */
     const searchMovies = async () => {
-        if (!query.trim()) return;
-
         setLoading(true);
-
         try {
-            const res = await tmdb.get("/search/movie", {
-                params: { query },
+            const res = await tmdb.get("/discover/movie", {
+                params: {
+                    with_genres: selectedGenre || undefined,
+                    vote_average_gte: minRating || undefined,
+                    sort_by: sort,
+                },
             });
 
-            let results = res.data.results || [];
+            const filtered = keyword
+                ? res.data.results.filter((m) =>
+                    m.title.toLowerCase().includes(keyword.toLowerCase())
+                )
+                : res.data.results;
 
-            // ⭐ 필터링
-            results = results.filter(
-                (m) => m.vote_average >= minRate
-            );
-
-            // ⭐ 정렬
-            if (sort === "vote_average.desc") {
-                results.sort((a, b) => b.vote_average - a.vote_average);
-            } else {
-                results.sort((a, b) => b.popularity - a.popularity);
-            }
-
-            setMovies(results);
-
-            // ⭐ 최근 검색어 저장 (LocalStorage)
-            const history =
-                JSON.parse(localStorage.getItem("recentSearch")) || [];
-
-            const updatedHistory = [
-                query,
-                ...history.filter((q) => q !== query),
-            ].slice(0, 5);
-
-            localStorage.setItem(
-                "recentSearch",
-                JSON.stringify(updatedHistory)
-            );
+            setMovies(filtered);
         } catch (e) {
             console.error(e);
         } finally {
@@ -62,69 +67,64 @@ export default function Search() {
         }
     };
 
-    /* reset */
+    /* =========================
+       RESET
+    ========================= */
     const resetFilters = () => {
-        setQuery("");
-        setMovies([]);
-        setMinRate(0);
+        setKeyword("");
+        setSelectedGenre("");
+        setMinRating(0);
         setSort("popularity.desc");
+        setMovies([]);
     };
 
     return (
         <div className="page search-page">
             <h2>🔍 Search Movies</h2>
 
-            {/* Search Bar */}
-            <div className="search-bar">
+            {/* FILTER BAR */}
+            <div className="filter-bar">
                 <input
-                    placeholder="Search movie title..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") searchMovies();
-                    }}
+                    type="text"
+                    placeholder="Search title..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
                 />
+
+                <select
+                    value={selectedGenre}
+                    onChange={(e) => setSelectedGenre(e.target.value)}
+                >
+                    <option value="">All Genres</option>
+                    {genres.map((g) => (
+                        <option key={g.id} value={g.id}>
+                            {g.name}
+                        </option>
+                    ))}
+                </select>
+
+                <select
+                    value={minRating}
+                    onChange={(e) => setMinRating(e.target.value)}
+                >
+                    <option value={0}>All Ratings</option>
+                    <option value={7}>⭐ 7+</option>
+                    <option value={8}>⭐ 8+</option>
+                </select>
+
+                <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                    <option value="popularity.desc">Popularity</option>
+                    <option value="release_date.desc">Latest</option>
+                    <option value="vote_average.desc">Rating</option>
+                </select>
+
                 <button onClick={searchMovies}>Search</button>
-            </div>
-
-            {/* Filters */}
-            <div className="filters">
-                <label>
-                    Min Rating:
-                    <select
-                        value={minRate}
-                        onChange={(e) =>
-                            setMinRate(Number(e.target.value))
-                        }
-                    >
-                        <option value={0}>All</option>
-                        <option value={5}>5+</option>
-                        <option value={7}>7+</option>
-                        <option value={8}>8+</option>
-                    </select>
-                </label>
-
-                <label>
-                    Sort:
-                    <select
-                        value={sort}
-                        onChange={(e) => setSort(e.target.value)}
-                    >
-                        <option value="popularity.desc">
-                            Popularity
-                        </option>
-                        <option value="vote_average.desc">
-                            Rating
-                        </option>
-                    </select>
-                </label>
-
-                <button className="reset-btn" onClick={resetFilters}>
+                <button className="reset" onClick={resetFilters}>
                     Reset
                 </button>
             </div>
 
-            {/* Result */}
+            {/* RESULT */}
             {loading && <div className="loading">Loading...</div>}
 
             <div className="movie-grid">

@@ -115,3 +115,44 @@
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 14px;
 }
+
+.search-page h2 {
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
+    padding: 8px 12px;
+}
+
+.filter-bar .reset {
+    background: #333;
+    color: #fff;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    cursor: pointer;
+    transition: transform 200ms ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.08);
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4757;
+}

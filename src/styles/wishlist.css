@@ -86,3 +86,56 @@
 .movie-card.liked {
     outline: 2px solid #ff4d4d;
 }
+.wishlist-page h2 {
+    margin-bottom: 20px;
+}
+
+/* Empty State */
+.wishlist-page.empty {
+    text-align: center;
+    padding-top: 120px;
+    opacity: 0.8;
+}
+
+.wishlist-page.empty span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Grid */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+}
+
+/* Card */
+.movie-card {
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.movie-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4757;
+}
+
+/* Info */
+.movie-info {
+    margin-top: 8px;
+}
+
+.movie-info span {
+    font-size: 12px;
+    opacity: 0.7;
+}
