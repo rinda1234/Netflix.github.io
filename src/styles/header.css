@@ -12,7 +12,9 @@
     align-items: center;
     justify-content: space-between;
 
-    padding: 12px 24px;   /* PC 기본 */
+    padding: 12px 24px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* ===============================
@@ -35,7 +37,7 @@
 }
 
 .nav-menu a {
-    margin-right: 16px;   /* PC 기본 간격 */
+    margin-right: 16px;
     color: white;
     text-decoration: none;
     font-size: 14px;
@@ -65,15 +67,15 @@
 }
 
 /* ===============================
-   MOBILE (핵심 수정 구간)
+   MOBILE (수정 완료 버전)
 =============================== */
 @media (max-width: 768px) {
     .app-header {
         padding: 10px 12px;
-        height: 52px;
-
-        justify-content: flex-start;
+        height: auto;                 /* ⭐ 고정 높이 제거 */
+        justify-content: center;      /* ⭐ 중앙 기준 */
         position: relative;
+        overflow-x: hidden;           /* ⭐ 오른쪽 잘림 방지 */
     }
 
     .logo {
@@ -86,18 +88,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        flex: none;              /* ⭐ flex:1 제거 */
+        flex-wrap: wrap;              /* ⭐ 핵심 */
+        max-width: 100%;
     }
 
     .nav-menu a {
-        margin: 0 6px;           /* ⭐ 좌우 균등 */
+        margin: 4px 6px;
         font-size: 13px;
         padding: 4px 2px;
-    }
-
-    /* ❌ 이거 반드시 제거 */
-    .nav-menu a:first-child {
-        margin-left: 0;
+        white-space: normal;          /* ⭐ 줄바꿈 허용 */
     }
 
     .logout-btn {
@@ -106,4 +105,12 @@
         padding: 4px 8px;
         font-size: 11px;
     }
+}
+
+/* ===============================
+   SAFETY (모바일 가로 스크롤 차단)
+=============================== */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
