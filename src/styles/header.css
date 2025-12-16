@@ -69,33 +69,40 @@
 =============================== */
 @media (max-width: 768px) {
     .app-header {
-        padding: 10px 12px;      /* ⭐ 좌우 여백 줄임 */
+        padding: 10px 12px;
         height: 52px;
+
+        justify-content: flex-start;
+        position: relative;
     }
 
     .logo {
-        font-size: 14px;         /* 로고 축소 */
-        margin-right: 8px;
+        position: absolute;
+        left: 12px;
+        font-size: 14px;
     }
 
     .nav-menu {
-        flex: 1;
-        justify-content: center; /* ⭐ 메뉴 전체를 가운데로 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: none;              /* ⭐ flex:1 제거 */
     }
 
     .nav-menu a {
-        margin-right: 10px;      /* ⭐ 모바일 메뉴 간격 축소 */
+        margin: 0 6px;           /* ⭐ 좌우 균등 */
         font-size: 13px;
         padding: 4px 2px;
     }
 
-    /* ⭐⭐ Home 버튼만 왼쪽 여백 줄이기 (핵심) */
+    /* ❌ 이거 반드시 제거 */
     .nav-menu a:first-child {
-        margin-left: -6px;
+        margin-left: 0;
     }
 
     .logout-btn {
-        margin-left: 6px;
+        position: absolute;
+        right: 12px;
         padding: 4px 8px;
         font-size: 11px;
     }
