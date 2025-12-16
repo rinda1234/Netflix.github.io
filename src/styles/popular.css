@@ -42,11 +42,13 @@
 ========================= */
 .movie-grid.table {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
+    gap: 16px;
 
-    height: 100%;        /* ✅ page 높이를 그대로 사용 */
-    overflow: hidden;    /* ✅ 스크롤 완전 차단 */
+    /* ⭐ PC에서는 더 많은 컬럼 */
+    grid-template-columns: repeat(6, 1fr);
+
+    height: calc(100vh - 180px);
+    overflow: hidden;
 }
 
 /* =========================
@@ -108,14 +110,22 @@
 /* =========================
    반응형 (겹침 방지)
 ========================= */
+
+/* ===============================
+   TABLE VIEW (태블릿)
+   =============================== */
 @media (max-width: 1024px) {
     .movie-grid.table {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
+/* ===============================
+   TABLE VIEW (모바일)
+   =============================== */
 @media (max-width: 768px) {
     .movie-grid.table {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 }
