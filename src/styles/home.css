@@ -1,0 +1,343 @@
+/* 전체 그리드 */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    margin-top: 70px;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* 영화 카드 */
+.movie-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 포스터 */
+.movie-card img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+/* 제목 */
+.movie-card h3 {
+    margin: 8px 0 0;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+}
+
+/* Hover 애니메이션 */
+.movie-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+}
+
+/* 추천(찜) 표시 */
+.movie-card.liked::after {
+    content: "★";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: gold;
+    color: black;
+    font-size: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.empty {
+    color: #aaa;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 80px;
+}
+/* 공통 page 레이아웃 */
+.page {
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
+}
+
+/* 전체 배경 */
+.home {
+    min-height: 100vh;
+    background: radial-gradient(1200px 700px at 20% -10%, rgba(255, 77, 77, 0.18), transparent 60%),
+    radial-gradient(900px 600px at 80% 0%, rgba(140, 70, 255, 0.16), transparent 55%),
+    #0b0b0f;
+    color: #fff;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    height: clamp(420px, 55vh, 620px);
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+    filter: saturate(1.05) contrast(1.05);
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+            linear-gradient(90deg, rgba(11,11,15,0.92) 0%, rgba(11,11,15,0.55) 45%, rgba(11,11,15,0.15) 100%),
+            linear-gradient(180deg, rgba(11,11,15,0.25) 0%, rgba(11,11,15,0.95) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 72px 20px 0;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(8px);
+}
+
+.hero-title {
+    margin: 14px 0 10px;
+    font-size: clamp(28px, 4vw, 52px);
+    line-height: 1.05;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.hero-desc {
+    max-width: 700px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+    font-size: clamp(14px, 1.5vw, 16px);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.hero-btn {
+    border: 0;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    transition: transform 200ms ease, filter 200ms ease, background 200ms ease;
+}
+
+.hero-btn:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+.hero-btn.primary {
+    background: linear-gradient(135deg, #ff4d4d, #ff2d86);
+    color: white;
+    box-shadow: 0 12px 35px rgba(255, 45, 134, 0.18);
+}
+
+.hero-btn.primary:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.hero-btn.ghost {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(8px);
+}
+
+.hero-btn.ghost:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+}
+
+.hero-loading {
+    margin-top: 14px;
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+}
+
+/* ROWS */
+.home-rows {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 22px 0 80px;
+}
+
+.row {
+    margin-top: 18px;
+    padding: 0 10px;
+}
+
+.row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 10px 10px;
+}
+
+.row-title {
+    font-size: 18px;
+    letter-spacing: 0.02em;
+}
+
+.row-loading {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+
+/* 가로 스크롤 트랙 */
+.row-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 180px);
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+}
+
+.row-track::-webkit-scrollbar {
+    height: 10px;
+}
+.row-track::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+}
+
+/* 카드 */
+.poster-card {
+    position: relative;
+    scroll-snap-align: start;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 220ms ease, box-shadow 220ms ease, border 220ms ease;
+}
+
+.poster-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.22);
+}
+
+.poster-card.liked {
+    border: 1px solid rgba(255, 77, 77, 0.9);
+    box-shadow: 0 0 0 2px rgba(255, 77, 77, 0.25) inset;
+}
+
+.poster-wrap {
+    aspect-ratio: 2 / 3;
+    width: 100%;
+    background: rgba(0,0,0,0.35);
+}
+
+.poster-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform 220ms ease;
+}
+
+.poster-card:hover .poster-wrap img {
+    transform: scale(1.08);
+}
+
+.poster-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+}
+
+.poster-meta {
+    padding: 10px 10px 12px;
+}
+
+.poster-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.92);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.poster-sub {
+    margin-top: 6px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.62);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dot {
+    opacity: 0.6;
+}
+
+/* 우상단 배지 */
+.like-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-weight: 900;
+    font-size: 13px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(8px);
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+    .hero-content {
+        padding-top: 62px;
+    }
+    .row-track {
+        grid-auto-columns: minmax(135px, 160px);
+    }
+}
+

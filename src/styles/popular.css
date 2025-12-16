@@ -1,0 +1,82 @@
+/* 공통 page 레이아웃 */
+.page {
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
+}
+
+
+.page-title {
+    color: white;
+    margin: 20px;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.movie-card {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4d4d;
+}
+
+.loading {
+    text-align: center;
+    color: #aaa;
+    padding: 40px;
+}
+.view-toggle {
+    display: flex;
+    gap: 12px;
+    margin: 20px;
+}
+
+.view-toggle button {
+    padding: 8px 14px;
+    border: none;
+    background: #222;
+    color: white;
+    cursor: pointer;
+}
+
+.view-toggle button.active {
+    background: #ff4d4d;
+}
+
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+.movie-table th, .movie-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+}
+
+.movie-table tr:hover {
+    background: #222;
+}
+
+.movie-table tr.liked {
+    background: rgba(255,0,0,0.2);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px;
+}

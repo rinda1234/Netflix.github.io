@@ -1,0 +1,141 @@
+/* 공통 page 레이아웃 */
+.page {
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
+}
+
+
+.page-title {
+    margin: 20px;
+    color: white;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+    padding: 20px;
+}
+
+.wishlist-card {
+    cursor: pointer;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+.wishlist-card img {
+    width: 100%;
+    display: block;
+}
+
+.wishlist-card .info {
+    padding: 10px;
+    color: white;
+}
+
+.empty {
+    margin-top: 120px;
+    text-align: center;
+    color: #aaa;
+    font-size: 18px;
+}
+.wishlist-page h2 {
+    margin-bottom: 14px;
+}
+
+.wishlist-page.empty {
+    text-align: center;
+    padding-top: 80px;
+}
+
+.wishlist-page.empty p {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.wishlist-page.empty span {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* movie-grid는 home/popular과 동일 구조 */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.movie-card {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card.liked {
+    outline: 2px solid #ff4d4d;
+}
+.wishlist-page h2 {
+    margin-bottom: 20px;
+}
+
+/* Empty State */
+.wishlist-page.empty {
+    text-align: center;
+    padding-top: 120px;
+    opacity: 0.8;
+}
+
+.wishlist-page.empty span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* Grid */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+}
+
+/* Card */
+.movie-card {
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.movie-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4757;
+}
+
+/* Info */
+.movie-info {
+    margin-top: 8px;
+}
+
+.movie-info span {
+    font-size: 12px;
+    opacity: 0.7;
+}

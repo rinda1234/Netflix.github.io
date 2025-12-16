@@ -1,0 +1,158 @@
+/* 공통 page 레이아웃 */
+.page {
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
+}
+
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-bar button,
+.search-bar select {
+    padding: 10px;
+    background: #222;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.recent {
+    padding: 0 20px 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.recent button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4d4d;
+}
+
+.empty {
+    margin-top: 80px;
+    text-align: center;
+    color: #aaa;
+}
+.search-page h2 {
+    margin-bottom: 14px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+}
+
+.search-bar button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.filters {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.filters label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.filters select {
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.reset-btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.15);
+    color: white;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.search-page h2 {
+    margin-bottom: 20px;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.filter-bar input,
+.filter-bar select,
+.filter-bar button {
+    padding: 8px 12px;
+}
+
+.filter-bar .reset {
+    background: #333;
+    color: #fff;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    cursor: pointer;
+    transition: transform 200ms ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.08);
+}
+
+.movie-card.liked {
+    outline: 3px solid #ff4757;
+}
