@@ -1,6 +1,11 @@
+/* 공통 page 레이아웃 */
 .page {
-    padding-top: 70px;
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
 }
+
 
 .page-title {
     color: white;

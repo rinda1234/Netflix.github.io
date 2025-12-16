@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/search.css";
+import useWishlist from "../hooks/useWishlist";
 
 export default function Search() {
     const [query, setQuery] = useState("");
@@ -12,20 +13,7 @@ export default function Search() {
     const [sort, setSort] = useState("popularity.desc");
 
     /* wishlist */
-    const [wishlist, setWishlist] = useState(() => {
-        return JSON.parse(localStorage.getItem("wishlist")) || [];
-    });
-
-    const toggleWishlist = (movie) => {
-        setWishlist((prev) => {
-            const exists = prev.some((m) => m.id === movie.id);
-            const updated = exists
-                ? prev.filter((m) => m.id !== movie.id)
-                : [...prev, movie];
-            localStorage.setItem("wishlist", JSON.stringify(updated));
-            return updated;
-        });
-    };
+    const { wishlist, toggleWishlist, isWishlisted } = useWishlist();
 
     /* search */
     const searchMovies = async () => {

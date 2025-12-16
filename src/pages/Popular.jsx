@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/popular.css";
+import useWishlist from "../hooks/useWishlist";
 
 export default function Popular() {
     const [movies, setMovies] = useState([]);
@@ -11,21 +12,8 @@ export default function Popular() {
     const [viewMode, setViewMode] = useState("infinite"); // infinite | table
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [wishlist, setWishlist] = useState(() => {
-        return JSON.parse(localStorage.getItem("wishlist")) || [];
-    });
-
-    const toggleWishlist = (movie) => {
-        setWishlist((prev) => {
-            const exists = prev.some((m) => m.id === movie.id);
-            const updated = exists
-                ? prev.filter((m) => m.id !== movie.id)
-                : [...prev, movie];
-
-            localStorage.setItem("wishlist", JSON.stringify(updated));
-            return updated;
-        });
-    };
+    // ✅ Custom Hook 사용 (중요)
+    const { wishlist, toggleWishlist, isWishlisted } = useWishlist();
 
     /* =========================
        API FETCH
@@ -35,7 +23,9 @@ export default function Popular() {
             setLoading(true);
             try {
                 const res = await tmdb.get("/movie/popular", {
-                    params: { page: viewMode === "infinite" ? page : currentPage },
+                    params: {
+                        page: viewMode === "infinite" ? page : currentPage,
+                    },
                 });
 
                 setTotalPages(res.data.total_pages);
@@ -85,11 +75,8 @@ export default function Popular() {
        Scroll Lock (Table View)
     ========================= */
     useEffect(() => {
-        if (viewMode === "table") {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
+        document.body.style.overflow =
+            viewMode === "table" ? "hidden" : "auto";
 
         return () => {
             document.body.style.overflow = "auto";
@@ -137,9 +124,7 @@ export default function Popular() {
                     <div
                         key={movie.id}
                         className={`movie-card ${
-                            wishlist.some((m) => m.id === movie.id)
-                                ? "liked"
-                                : ""
+                            isWishlisted(movie.id) ? "liked" : ""
                         }`}
                         onClick={() => toggleWishlist(movie)}
                     >
@@ -173,10 +158,8 @@ export default function Popular() {
                 </div>
             )}
 
-            {/* Loading */}
             {loading && <div className="loading">Loading...</div>}
 
-            {/* Top Button */}
             <button className="top-btn" onClick={scrollTop}>
                 ↑ TOP
             </button>

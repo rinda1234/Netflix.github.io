@@ -59,9 +59,14 @@
     text-align: center;
     margin-top: 80px;
 }
+/* 공통 page 레이아웃 */
 .page {
-    padding-top: 70px; /* Header 높이 */
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
 }
+
 /* 전체 배경 */
 .home {
     min-height: 100vh;

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/home.css";
+import useWishlist from "../hooks/useWishlist";
 
 function Row({ title, movies, wishlist, onToggle, loading }) {
     return (
@@ -58,19 +59,7 @@ function Row({ title, movies, wishlist, onToggle, loading }) {
 }
 
 export default function Home() {
-    // ✅ LocalStorage wishlist
-    const [wishlist, setWishlist] = useState(() => {
-        return JSON.parse(localStorage.getItem("wishlist")) || [];
-    });
-
-    const toggleWishlist = (movie) => {
-        setWishlist((prev) => {
-            const exists = prev.some((m) => m.id === movie.id);
-            const updated = exists ? prev.filter((m) => m.id !== movie.id) : [...prev, movie];
-            localStorage.setItem("wishlist", JSON.stringify(updated));
-            return updated;
-        });
-    };
+    const { wishlist, toggleWishlist } = useWishlist();
 
     // ✅ Home에서 4개 API 호출 (필수 충족)
     const [rows, setRows] = useState({

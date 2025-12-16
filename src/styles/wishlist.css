@@ -1,6 +1,11 @@
+/* 공통 page 레이아웃 */
 .page {
-    padding-top: 70px;
+    width: 100%;
+    min-height: calc(100vh - 80px); /* header 높이 */
+    padding-top: 80px;
+    box-sizing: border-box;
 }
+
 
 .page-title {
     margin: 20px;
@@ -42,4 +47,42 @@
     text-align: center;
     color: #aaa;
     font-size: 18px;
+}
+.wishlist-page h2 {
+    margin-bottom: 14px;
+}
+
+.wishlist-page.empty {
+    text-align: center;
+    padding-top: 80px;
+}
+
+.wishlist-page.empty p {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.wishlist-page.empty span {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* movie-grid는 home/popular과 동일 구조 */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.movie-card {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card.liked {
+    outline: 2px solid #ff4d4d;
 }
