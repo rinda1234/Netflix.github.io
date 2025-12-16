@@ -1,11 +1,10 @@
 /* ===============================
-   HEADER BASE (PC)
+   HEADER BASE
 =============================== */
 .app-header {
     position: sticky;
     top: 0;
     z-index: 1000;
-
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(8px);
 
@@ -68,31 +67,28 @@
 }
 
 /* ===============================
-   MOBILE (최종 안정 버전)
+   MOBILE (수정 완료 버전)
 =============================== */
 @media (max-width: 768px) {
     .app-header {
-        padding: 10px 48px;        /* ⭐ 좌우 여백 동일하게 확보 */
+        padding: 10px 12px;
+        height: auto;                 /* ⭐ 고정 높이 제거 */
+        justify-content: center;      /* ⭐ 중앙 기준 */
         position: relative;
-        justify-content: center;   /* ⭐ 중앙 기준 */
-        height: auto;
-        overflow-x: hidden;        /* ⭐ 오른쪽 잘림 방지 */
-        box-sizing: border-box;
+        overflow-x: hidden;           /* ⭐ 오른쪽 잘림 방지 */
     }
 
-    /* 왼쪽 로고 */
     .logo {
         position: absolute;
         left: 12px;
         font-size: 14px;
     }
 
-    /* 중앙 메뉴 */
     .nav-menu {
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;           /* ⭐ 넘치면 줄바꿈 */
+        flex-wrap: wrap;              /* ⭐ 핵심 */
         max-width: 100%;
     }
 
@@ -100,10 +96,9 @@
         margin: 4px 6px;
         font-size: 13px;
         padding: 4px 2px;
-        white-space: normal;       /* ⭐ 모바일 줄바꿈 허용 */
+        white-space: normal;          /* ⭐ 줄바꿈 허용 */
     }
 
-    /* 오른쪽 로그아웃 */
     .logout-btn {
         position: absolute;
         right: 12px;
@@ -113,10 +108,9 @@
 }
 
 /* ===============================
-   SAFETY (가로 스크롤 방지)
+   SAFETY (모바일 가로 스크롤 차단)
 =============================== */
-html,
-body {
+html, body {
     max-width: 100%;
     overflow-x: hidden;
 }
