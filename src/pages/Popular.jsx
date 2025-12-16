@@ -1,19 +1,16 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import tmdb from "../api/tmdb";
 import "../styles/popular.css";
 import useWishlist from "../hooks/useWishlist";
 
-const ITEMS_PER_PAGE = 12; // ⭐ Table View 기준 한 페이지 개수
-
 export default function Popular() {
     const [movies, setMovies] = useState([]);
     const [page, setPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
 
     const [viewMode, setViewMode] = useState("infinite"); // infinite | table
-    const [currentPage, setCurrentPage] = useState(1);
-
     const { toggleWishlist, isWishlisted } = useWishlist();
 
     /* =========================
@@ -25,7 +22,7 @@ export default function Popular() {
             try {
                 const res = await tmdb.get("/movie/popular", {
                     params: {
-                        page: viewMode === "infinite" ? page : 1, // ⭐ Table View는 항상 page=1
+                        page: viewMode === "infinite" ? page : currentPage,
                     },
                 });
 
@@ -40,7 +37,8 @@ export default function Popular() {
                         return [...prev, ...filtered];
                     });
                 } else {
-                    setMovies(res.data.results); // ⭐ 한 페이지 데이터만 저장
+                    // ✅ Table View는 페이지마다 새 데이터
+                    setMovies(res.data.results);
                 }
             } catch (e) {
                 console.error(e);
@@ -50,7 +48,7 @@ export default function Popular() {
         };
 
         fetchPopular();
-    }, [page, viewMode]);
+    }, [page, currentPage, viewMode]);
 
     /* =========================
        Infinite Scroll
@@ -84,20 +82,6 @@ export default function Popular() {
         };
     }, [viewMode]);
 
-    /* =========================
-       Table View Slice
-    ========================= */
-    const tableMovies = useMemo(() => {
-        if (viewMode !== "table") return movies;
-
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end = start + ITEMS_PER_PAGE;
-        return movies.slice(start, end);
-    }, [movies, currentPage, viewMode]);
-
-    /* =========================
-       UI
-    ========================= */
     return (
         <div className="page popular-page">
             <div className="popular-header">
@@ -128,7 +112,7 @@ export default function Popular() {
 
             {/* Movie Grid */}
             <div className={`movie-grid ${viewMode}`}>
-                {(viewMode === "table" ? tableMovies : movies).map((movie) => (
+                {movies.map((movie) => (
                     <div
                         key={movie.id}
                         className={`movie-card ${
@@ -154,11 +138,11 @@ export default function Popular() {
                     >
                         Prev
                     </button>
-                    <span>Page {currentPage}</span>
+                    <span>
+                        {currentPage} / {totalPages}
+                    </span>
                     <button
-                        disabled={
-                            currentPage * ITEMS_PER_PAGE >= movies.length
-                        }
+                        disabled={currentPage === totalPages}
                         onClick={() => setCurrentPage((p) => p + 1)}
                     >
                         Next
